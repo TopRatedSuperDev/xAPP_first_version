@@ -1,0 +1,51 @@
+
+.wrapper_tree {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 20px;
+}
+
+.wrapper_tree {
+  display: flex;
+  flex-direction: column;
+}
+
+/* .bar_wrapper_tree {
+  margin-top: 5px;
+  margin-left: 5px;
+} */
+
+.bar_wrapper_tree > button {
+  width: 85px;
+  height: 30px;
+  margin: 3px;
+  font-size: 14px;
+  border-radius: 5px;
+}
+
+.bar_wrapper_tree > input {
+  width: 100px;
+  height: 30px;
+  margin-right: 5px;
+}
+
+.bar_wrapper_tree > label {
+  margin: 3px;
+}
+
+.tree_wrapper_tree {
+  height: calc(100% - 25px);
+  margin-top: 20px;
+}
+
+.previous_tree {
+  margin-left: 10px;
+}
+
+.next_tree,
+.collapse_tree {
+  margin-right: 10px;
+  margin-left: 5px;
+}
+

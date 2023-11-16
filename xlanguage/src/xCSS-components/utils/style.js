@@ -1,0 +1,126 @@
+export function isColor(strColor) {
+    const s = new Option().style;
+    s.color = strColor;
+    return s.color !== '';
+}
+export function createBoxShadowString(boxShadowState) {
+    const enabledBoxShadowState = boxShadowState.filter(item => item.enabled);
+    let boxShadowStr = ''
+    if (enabledBoxShadowState.length) {
+        enabledBoxShadowState.forEach(({ enableInset, offsetX, offsetY, blurRadius, spreadRadius, color }, index) => {
+            boxShadowStr += `${enableInset ? 'inset' : ''} ${offsetX}px ${offsetY}px ${blurRadius}px ${spreadRadius}px ${color} ${index !== enabledBoxShadowState.length - 1 ? ',' : ''}`;
+        })
+    } else {
+        boxShadowStr = 'none'
+    }
+    return boxShadowStr
+}
+
+export function createTransformString(transform) {
+    const translate3dStr = `translate3d(${transform.translate.x}px, ${transform.translate.y}px, ${transform.translate.z}px)`;
+    const scale3dStr = `scale3d(${transform.scale.x}, ${transform.scale.y}, ${transform.scale.z})`;
+    const skew3dStr = `skew(${transform.skew.x}deg, ${transform.skew.y}deg)`;
+    const rotate3dStr = `rotate3d(${transform.rotate.x}, ${transform.rotate.y}, ${transform.rotate.z})`;
+    return `${translate3dStr} ${scale3dStr} ${skew3dStr}`
+}
+
+export function createGradientString(gradientStops, gradientAngle) {
+    const colors = gradientStops
+        .filter(stop => !!stop.visible)
+        .map(({ color, percentage }) => {
+            return `${color} ${percentage}%`
+        }).join(',');
+    
+    return gradientAngle
+        ? `linear-gradient(${gradientAngle}deg, ${colors})`
+        : `linear-gradient(to right, ${colors})`
+}
+
+export function createStyleObj(elementState) {
+    const border = elementState.border;
+    return {
+        background: elementState.enableGradientBackground 
+            ? createGradientString(
+                elementState.backgroundGradientStops, 
+                elementState.backgroundGradientAngle
+            )
+            : elementState.backgroundColor,
+        // text:elementState.text,
+        width: elementState.width,
+        height: elementState.height,
+        top: elementState.top,
+        left: elementState.left,
+        marginTop: elementState.marginTop,
+        marginRight: elementState.marginRight,
+        marginBottom: elementState.marginBottom,
+        marginLeft: elementState.marginLeft,
+        paddingTop: elementState.paddingTop,
+        paddingRight: elementState.paddingRight,
+        paddingBottom: elementState.paddingBottom,
+        paddingLeft: elementState.paddingLeft,
+        position: 'absolute',
+        borderTop: !elementState.borderEnabled ? 'none' : `${border.top.width}px ${border.top.style} ${border.top.color}`,
+        borderBottom: !elementState.borderEnabled ? 'none' : `${border.bottom.width}px ${border.bottom.style} ${border.bottom.color}`,
+        borderLeft: !elementState.borderEnabled ? 'none' : `${border.left.width}px ${border.left.style} ${border.left.color}`,
+        borderRight: !elementState.borderEnabled ? 'none' : `${border.right.width}px ${border.right.style} ${border.right.color}`,
+        boxShadow: createBoxShadowString(elementState.boxShadow),
+        justifyContent: elementState.justfyContent,
+        alignItems: elementState.alignItem,
+        display: elementState.display,
+        transform: createTransformString(elementState.transform),
+        animationDuration: `${elementState.animation.duration}s`,
+        animationDelay: `${elementState.animation.delay}s`,
+        animationTimingFunction: elementState.animation.timing,
+        animationIterationCount: 'infinite',
+        animationName: elementState.animation.name,
+        zIndex: elementState.zIndex
+    }
+}
+
+export function createStyleText(elementState) {
+    const border = elementState.border;
+
+    var css_text = 
+    "background: " +
+      (elementState.enableGradientBackground ?
+        createGradientString(elementState.backgroundGradientStops, elementState.backgroundGradientAngle) :
+        elementState.backgroundColor) +
+    "; width: " +
+      elementState.width +
+    "; height: " +
+      elementState.height +
+    "; top: " +
+      elementState.top +
+    "; left: " +
+      elementState.left +
+    "; position: absolute; border-top: " +
+      (!elementState.borderEnabled ? "none" : `${border.top.width}px ${border.top.style} ${border.top.color}`) +
+    "; border-bottom: " +
+      (!elementState.borderEnabled ? "none" : `${border.bottom.width}px ${border.bottom.style} ${border.bottom.color}`) +
+    "; border-left: " +
+      (!elementState.borderEnabled ? "none" : `${border.left.width}px ${border.left.style} ${border.left.color}`) +
+    "; border-right: " +
+      (!elementState.borderEnabled ? "none" : `${border.right.width}px ${border.right.style} ${border.right.color}`) +
+    "; box-shadow: " +
+      createBoxShadowString(elementState.boxShadow) +
+    "; justify-content: " + 
+      elementState.justifyContent + 
+    "; align-items: " + 
+      elementState.alignItem + 
+    "; display: " + 
+        elementState.display + 
+    "; transform: " +
+      createTransformString(elementState.transform) +
+    "; animation-duration: " +
+      `${elementState.animation.duration}s` + 
+    "; animation-delay: " +
+      `${elementState.animation.delay}s` +
+    "; animation-timing-function: " +
+      elementState.animation.timing +
+    "; animation-iteration-count: infinite; animation-name: " +
+      elementState.animation.name +
+    "; z-index: " +
+      elementState.zIndex;
+
+    return css_text
+}
